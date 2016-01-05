@@ -1,33 +1,20 @@
-Contributing to replace-labs scripts
-=====================================
+Contributing to scripts
+=======================
 
 First things first
 ------------------
 
 Read the OpenStack Style Commandments http://docs.openstack.org/developer/hacking/
 
-General
--------
-
-Contributing code to replace labs scripts follows the usual OpenStack process
-as described in `How To Contribute`__ in the OpenStack wiki.
-Our `main blueprint`__ contains the usual links for blueprints, bugs, etc.
-
-__ contribute_
-.. _contribute: http://docs.openstack.org/infra/manual/developers.html
-
-__ spec_
-.. _spec: http://specs.openstack.org/openstack/docs-specs/specs/liberty/traininglabs.html
-
 Getting started
 ---------------
 
-.. TODO(psalunke): Fix Me. Add more content here.
+.. TODO(aplawson): Fix Me. Add more content here.
 
 Prerequisites
 -------------
 
-.. TODO(psalunke): Fix Me. Add more content here.
+.. TODO(aplawson): Fix Me. Add more content here.
 
 Coding style
 ------------
@@ -37,7 +24,7 @@ We follow the conventions of other OpenStack projects.
 StackTrain
 ~~~~~~~~~~
 
-.. TODO(psalunke): Fix me. Add more content here.
+.. TODO(aplawson): Fix me. Add more content here.
 
 Osbash
 ~~~~~~
@@ -52,7 +39,7 @@ Structure
 ---------
 
 
-.. TODO(psalunke): Add more information as the repo gets merged.
+.. TODO(aplawson): Add more information as the repo gets merged.
 
 OSBASH:
 ~~~~~~~
@@ -99,7 +86,7 @@ Useful tools for checking scripts:
 - `bashate <https://github.com/openstack-dev/bashate>`_ (must pass)
 - `shellcheck <https://github.com/koalaman/shellcheck.git>`_ (optional)
 
-.. TODO (psalunke): Add Python checks etc.
+.. TODO (aplawson): Add Python checks etc.
 
 Submitting patches
 ------------------
