@@ -49,7 +49,7 @@ Running this will automatically spin up 3 virtual machines in VirtualBox/KVM:
 * Network node
 * Compute node
 
-Now you have a multi-node deployment of OpenStack running with the below services installed.
+When complete, you will have a multi-node deployment of OpenStack running with all required services installed.
 
 OpenStack services installed on Controller node:
 
@@ -144,29 +144,21 @@ For Demo user privileges::
 
 Now you can access the OpenStack services via CLI.
 
-Specs
------
 
-To review specifications, see http://specs.openstack.org/openstack/docs-specs/specs/liberty/traininglabs.html
-
-Mailing lists, IRC
+How to get invovled
 ------------------
 
-To contribute, join the IRC channel, ``#openstack-doc``, on IRC freenode
-or write an e-mail to the OpenStack Documentation Mailing List
-``openstack-docs@lists.openstack.org``. Please use ``[training-labs]`` tag in the
-subject of the email message.
+To help contribute to this forked effort, send me an email to ``alawson@aqorn.com``.
+Please use the ``[openstack-lab]`` tag (or similar) in the subject of the email message.
 
-You might consider
-`registering on the OpenStack Documentation Mailing List <http://lists.openstack.org/cgi-bin/mailman/listinfo/openstack-docs>`_
-if you want to post your e-mail instantly. It may take some time for
-unregistered users, as it requires an administrator's approval.
 
-Sub-team leads
+Getting involved with OpenStack
 --------------
 
-Feel free to ping Roger or Pranav on the IRC channel ``#openstack-doc`` regarding
-any queries about the Labs section.
+You might consider `registering on the OpenStack Documentation Mailing List <http://lists.openstack.org/cgi-bin/mailman/listinfo/openstack-docs>`_ if you want to post your e-mail instantly. It may take some time for
+unregistered users, as it requires an administrator's approval.
+
+This project is being developed with the help of the team leads within the original OpenStack project:
 
 * Roger Luethi
 
@@ -178,14 +170,8 @@ any queries about the Labs section.
   * Email: ``dguitarbite@gmail.com``
   * IRC: ``dguitarbite``
 
-Meetings
---------
-
-Team meeting for training-labs is on alternating Thursdays on Google Hangouts.
-https://wiki.openstack.org/wiki/Documentation/training-labs#Meeting_Information
 
 Wiki
 ----
 
-Follow various links on training-labs here:
-https://wiki.openstack.org/wiki/Documentation/training-labs#Meeting_Information
+When a Wiki is available, it will be posted here (most likely at readthedocs.org or similar)
