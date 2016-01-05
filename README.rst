@@ -1,5 +1,5 @@
 =============
-Training labs
+OpenStack Lab Project
 =============
 
 About
