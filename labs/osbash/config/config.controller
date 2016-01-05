@@ -1,4 +1,4 @@
-# Node VM configuration. Used by osbash/wbatch (host and guest).
+# Node VM configuration. Used by osbash (host and guest).
 
 # Port forwarding
 VM_SSH_PORT=2230
