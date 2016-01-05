@@ -5,25 +5,31 @@ Training labs
 About
 -----
 
-Provide an automated way to deploy Vanilla OpenStack and closely follow
-`OpenStack Install Guide <http://docs.openstack.org/#install-guides>`_.
+Deploy OpenStack using the (knock-on-wood) latest version of OpenStack on virtual machines.
+This creates a virtual cloud and the goal is to deploy this cloud onto a virtual machine so
+it can be replicated over and over with identical IP addresses. The steps follow
+`OpenStack Install Guide <http://docs.openstack.org/#install-guides>`_ as closely as possible.
 
-We strove to give easy way to setup OpenStack cluster which should
-be a good starting point for beginners to learn OpenStack, and for advanced
-users to test out new features, check out different capabilities of OpenStack.
-On top of that training-labs will also be a good way to test the install
-guides on a regular basis.
+This repo was written and designed for numerous reasons; for the purpose of enabling proof of
+concepts, to provide OpenStack instructors an easy way to setup OpenStack for the
+purposes of teaching OpenStack and for advanced users to test features specific to a
+particular OpenStack release.
+This repository also confirms whether the installation process works as expected or required.
 
-Training-labs is a project under OpenStack Documentation. For more information
-see the `OpenStack wiki <https://wiki.openstack.org/wiki/Documentation/training-labs>`_.
+OpenStack-lab started as a fork of the OpenStack training-labs project. For more information
+about the original project, see the `OpenStack wiki <https://wiki.openstack.org/wiki/Documentation/training-labs>`_.
 
 * Free software: Apache license
-* Documentation: http://docs.openstack.org/developer/training-labs
-* Source: http://git.openstack.org/cgit/openstack/training-labs
-* Bugs: http://bugs.launchpad.net/training-labs
+* Documentation: http://github.com/aplawson/openstack-lab/docs
+* Source: http://github.com/aplawson/openstack-lab
+* Bugs: To Be Determined
 
 Pre-requisite
 -------------
+
+The idea was initially to support VirtualBox on all platforms but now the focus has become
+more specificy to libvirt/KVM on Linux (Ubuntu to be precise). KVM support is still being
+worked out so please use VirtualBox for the time being.
 
 * Download and install `VirtualBox <https://www.virtualbox.org/wiki/Downloads>`_.
 
@@ -32,7 +38,7 @@ How to run the scripts
 
 Clone the training-labs repository::
 
-    $ git clone git://git.openstack.org/openstack/training-labs.git
+    $ git clone git://github.com/aplawson/openstack-lab.git
 
 What the script installs
 ------------------------
