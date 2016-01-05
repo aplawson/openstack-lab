@@ -7,7 +7,7 @@ About
 
 Deploy OpenStack using the (knock-on-wood) latest version of OpenStack on virtual machines.
 This creates a virtual cloud and the goal is to deploy this cloud onto a virtual machine so
-it can be replicated over and over with identical IP addresses. The steps follow
+it can be replicated over and over with identical IP addresses. The steps in this scripted build process follow
 `OpenStack Install Guide <http://docs.openstack.org/#install-guides>`_ as closely as possible.
 
 This repo was written and designed for numerous reasons; for the purpose of enabling proof of
