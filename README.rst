@@ -51,7 +51,7 @@ Running this will automatically spin up 3 virtual machines in VirtualBox/KVM:
 
 When complete, you will have a multi-node deployment of OpenStack running with all required services installed.
 
-OpenStack services installed on Controller node:
+**OpenStack services installed on Controller node:**
 
 * Keystone
 * Horizon
@@ -71,7 +71,7 @@ OpenStack services installed on Controller node:
 
 * Cinder
 
-Openstack services installed on Network node:
+**Openstack services installed on Network node:**
 
 * Neutron
 
@@ -80,7 +80,7 @@ Openstack services installed on Network node:
   * neutron-dhcp-agent
   * neutron-metadata-agent
 
-Openstack Services installed on Compute node:
+**Openstack Services installed on Compute node:**
 
 * Nova
 
