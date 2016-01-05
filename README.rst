@@ -39,17 +39,20 @@ How to run the scripts
 Clone the training-labs repository::
 
     $ git clone git://github.com/aplawson/openstack-lab.git
+    $ cd openstack-lab/labs/osbash
+    $ ./osbash.sh -b cluster
+
 
 What the script installs
 ------------------------
 
-Running this will automatically spin up 3 virtual machines in VirtualBox/KVM:
+Running this will automatically spin up 3 virtual machines:
 
 * Controller node
 * Network node
 * Compute node
 
-When complete, you will have a multi-node deployment of OpenStack running with all required services installed.
+When complete, you *should* have a multi-node deployment of OpenStack running with all required services installed.
 
 **OpenStack services installed on Controller node:**
 
