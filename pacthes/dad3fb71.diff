@@ -1,0 +1,190 @@
+From dad3fb717d3ab8ec371a372477a8a705adf05f73 Mon Sep 17 00:00:00 2001
+From: Roger Luethi <rl@patchworkscience.org>
+Date: Sun, 27 Dec 2015 20:30:04 +0100
+Subject: [PATCH] Support for i386 nodes
+
+This patch adds support for i386 nodes. It is useful on host systems
+that don't have hardware virtualization extensions, such as 32-bit host
+operating systems and virtualized host environments (i.e. nested
+virtualization).
+
+Successfully tested with Debian 8.2 running inside VirtualBox.
+
+WIP, main open issues:
+- only works with VM_CPUS=1
+- in some host environments, the basedisk network does not come up after
+  the initial reboot; needs the user to log in via console and "ifup
+  eth0"
+- basedisk build takes about an hour with nested virtualization, but on
+  a public cloud instance with comparable specs, it took 14 hours
+
+Change-Id: Id6cbd42679cf24e6546a3f8ff6e82a46d8d8cf83
+---
+
+diff --git a/labs/osbash/config/config.compute b/labs/osbash/config/config.compute
+index 2242da4..adb8050 100644
+--- a/labs/osbash/config/config.compute
++++ b/labs/osbash/config/config.compute
+@@ -14,4 +14,4 @@
+ VM_MEM=1024
+ 
+ # Override number of virtual CPUs (default is 1)
+-VM_CPUS=2
++VM_CPUS=1
+diff --git a/labs/osbash/config/openstack b/labs/osbash/config/openstack
+index 7605612..6a0481f 100644
+--- a/labs/osbash/config/openstack
++++ b/labs/osbash/config/openstack
+@@ -5,7 +5,13 @@
+ : ${OPENSTACK_RELEASE:=kilo}
+ 
+ # CirrOS image URL
+-CIRROS_URL="http://download.cirros-cloud.net/0.3.3/cirros-0.3.3-x86_64-disk.img"
++if [ "$(uname -m)" = "x86_64" ]; then
++    arch=x86_64
++else
++    arch=i386
++fi
++CIRROS_URL="http://download.cirros-cloud.net/0.3.3/cirros-0.3.3-$arch-disk.img"
++unset arch
+ 
+ #------------------------------------------------------------------------------
+ # http://docs.openstack.org/kilo/install-guide/install/apt/content/ch_basic_environment.html#basics-networking
+diff --git a/labs/osbash/lib/osbash/lib.ubuntu-14.04-server-i386.sh b/labs/osbash/lib/osbash/lib.ubuntu-14.04-server-i386.sh
+new file mode 100644
+index 0000000..7af4fab
+--- /dev/null
++++ b/labs/osbash/lib/osbash/lib.ubuntu-14.04-server-i386.sh
+@@ -0,0 +1,101 @@
++# Ubuntu 14.04 LTS i386 server
++
++# Default scripts for all Ubuntu installs
++: ${BASE_INSTALL_SCRIPTS:=scripts.ubuntu_base}
++
++#-------------------------------------------------------------------------------
++# Installation from ISO image
++#-------------------------------------------------------------------------------
++
++readonly ISO_URL_BASE=http://releases.ubuntu.com/14.04/
++
++ISO_URL=$ISO_URL_BASE/ubuntu-14.04.3-server-i386.iso
++ISO_MD5=352009d5b44f0e97c9558919f0147c0c
++
++readonly _PS_ssh=http://git.openstack.org/cgit/openstack/training-labs/plain/labs/osbash/lib/osbash/netboot/preseed-ssh-v2.cfg
++readonly _PS_vbadd=http://git.openstack.org/cgit/openstack/training-labs/plain/labs/osbash/lib/osbash/netboot/preseed-vbadd.cfg
++readonly _PS_all=http://git.openstack.org/cgit/openstack/training-labs/plain/labs/osbash/lib/osbash/netboot/preseed-all-v2.cfg
++
++# Arguments for ISO image installer
++readonly _BOOT_ARGS="/install/vmlinuz
++    noapic
++    preseed/url=%s
++    debian-installer=en_US
++    auto=true
++    locale=en_US
++    hostname=osbash
++    fb=false
++    debconf/frontend=noninteractive
++    keyboard-configuration/modelcode=SKIP
++    initrd=/install/initrd.gz
++    console-setup/ask_detect=false"
++
++# Fallback function to find current ISO image in case the file in ISO_URL is
++# neither on the disk nor at the configured URL.
++# This mechanism was added because old Ubuntu ISOs are removed from the server
++# as soon as a new ISO appears.
++function update_iso_variables {
++    # Get matching line from distro repo's MD5SUMS file, e.g.
++    # "9e5fecc94b3925bededed0fdca1bd417 *ubuntu-14.04.3-server-i386.iso"
++    local distro_info=$(wget -O - $ISO_URL_BASE/MD5SUMS|grep server-i386)
++
++    # First part (removing everything after first space) is the md5sum
++    ISO_MD5=${distro_info%% *}
++
++    # Second part (keeping everything after ' *') is the ISO file name
++    local iso_file=${distro_info#* \*}
++
++    ISO_URL=$ISO_URL_BASE/$iso_file
++
++    echo -e >&2 "${CStatus:-}New ISO_URL: ${CData:-}$ISO_URL${CReset:-}"
++}
++
++VBOX_OSTYPE=Ubuntu
++
++# Boot the ISO image operating system installer
++function vbox_distro_start_installer {
++    local vm_name=$1
++
++    # pick a _PS_* file
++    local preseed=_PS_$VM_ACCESS
++
++    echo "Using $preseed ${!preseed}"
++
++    local boot_args=$(printf "$_BOOT_ARGS" "${!preseed}")
++
++    vbox_kbd_escape_key "$vm_name"
++    vbox_kbd_escape_key "$vm_name"
++    vbox_kbd_enter_key "$vm_name"
++
++    vbox_sleep 1
++
++    echo -e "${CStatus:-}Pushing boot command line${CReset:-}"
++    vbox_kbd_string_input "$vm_name" "$boot_args"
++
++    echo "Initiating boot sequence"
++    vbox_kbd_enter_key "$vm_name"
++}
++
++#-------------------------------------------------------------------------------
++# Installation from Internet server (if ISO image cannot be used, e.g. with KVM)
++#-------------------------------------------------------------------------------
++
++readonly DISTRO_URL=http://archive.ubuntu.com/ubuntu/dists/trusty/main/installer-i386/
++
++# Extra arguments for virt-install
++readonly EXTRA_ARGS="locale=en_US.UTF-8
++    console-keymaps-at/keymap=us
++    console-setup/ask_detect=false
++    console-setup/layoutcode=us
++    keyboard-configuration/layout=USA
++    keyboard-configuration/variant=US
++    netcfg/get_hostname=osbash
++    netcfg/get_domainname=local
++    mirror/country=CH
++    mirror/http/directory=/ubuntu
++    mirror/http/mirror=ch.archive.ubuntu.com
++    mirror/protocol=http
++    mirror/http/proxy=
++    preseed/url=${_PS_ssh}"
++
++# vim: set ai ts=4 sw=4 et ft=sh:
+diff --git a/labs/osbash/lib/osbash/virtualbox-functions.sh b/labs/osbash/lib/osbash/virtualbox-functions.sh
+index ddbf621..36edf2d 100644
+--- a/labs/osbash/lib/osbash/virtualbox-functions.sh
++++ b/labs/osbash/lib/osbash/virtualbox-functions.sh
+@@ -453,6 +453,13 @@
+             --groups "/$VM_GROUP"  >/dev/null
+     fi
+ 
++    if WBATCH= $VBM showvminfo --machinereadable "$vm_name" | \
++            grep -q 'longmode="off"'; then
++        echo -e >&2 "${CStatus:-}Nodes run 32-bit OS, enabling PAE.${CReset:-}"
++        # Ubuntu 14.04 LTS i386 needs PAE
++        $VBM modifyvm "$vm_name" --pae on
++    fi
++
+     $VBM modifyvm "$vm_name" --rtcuseutc on
+     $VBM modifyvm "$vm_name" --biosbootmenu disabled
+     $VBM modifyvm "$vm_name" --largepages on
+diff --git a/labs/osbash/osbash.sh b/labs/osbash/osbash.sh
+index 72558cb..4b89a83 100755
+--- a/labs/osbash/osbash.sh
++++ b/labs/osbash/osbash.sh
+@@ -8,7 +8,7 @@
+ 
+ TOP_DIR=$(cd "$(dirname "$0")" && pwd)
+ 
+-: ${DISTRO:=ubuntu-14.04-server-amd64}
++: ${DISTRO:=ubuntu-14.04-server-i386}
+ : ${PROVIDER:=virtualbox}
+ 
+ source "$TOP_DIR/config/localrc"
