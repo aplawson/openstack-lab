@@ -9,6 +9,6 @@
 : ${VM_GROUP:=OpenStack training-labs}
 
 # VM GUI type (one of headless, gui, vnc)
-: ${VM_UI:=vnc}
-
+: ${VM_UI:=headless}
+: ${VIRT_TYPE:=kvm}
 # vim: set ai ts=4 sw=4 et ft=sh:

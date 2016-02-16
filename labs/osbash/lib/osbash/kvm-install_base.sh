@@ -28,7 +28,7 @@ function vm_install_base {
 
     local console_type
     if [ "$VM_UI" = "headless" ]; then
-        console_type="--noautoconsole --wait=-1"
+        console_type="--noautoconsole --wait=-1 --graphics vnc,listen=0.0.0.0"
     elif [ "$VM_UI" = "vnc" ]; then
         console_type="--graphics vnc,listen=0.0.0.0"
     else
@@ -45,7 +45,7 @@ function vm_install_base {
         --os-type linux \
         --ram "${VM_BASE_MEM:=512}" \
         --vcpus 1 \
-        --virt-type kvm \
+        --virt-type $VIRT_TYPE \
         $console_type \
         &
 
